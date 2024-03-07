@@ -1,0 +1,67 @@
+<html>
+    <style>
+        html, body, .main-container {
+            height: 100%;
+        }
+
+        .main-container {
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .horizontal-container {
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vertical-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .elem {
+            padding: 5px;
+        }
+    </style>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="vertical-container">
+                <div class="elem">
+                    <h1>Go, Dzilla!</h1>
+                </div>
+                <div class="elem vertical-container">
+                    <label id="label-url" for="url">URL:</label>
+                    <a id="url" href="{{ .Url }}">{{ .Url }}</a>
+                </div>
+                <div class="elem vertical-container">
+                    <label id="label-short" for="short">Short:</label>
+                    <a id="short">{{ .Token }}</a>
+                </div>
+                <div class="elem">
+                    <a href="/">
+                        <button>Return</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        window.onload = function() {
+            token = $("#short").text()
+            short = `${window.location.origin}/${token}`
+            $("#short").text(short)
+            $("#short").attr("href", short)
+        };
+    </script>
+</html>

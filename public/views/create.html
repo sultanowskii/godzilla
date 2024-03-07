@@ -1,0 +1,72 @@
+<html>
+    <style>
+        html, body, .main-container {
+            height: 100%;
+        }
+
+        .main-container {
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .horizontal-container {
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vertical-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .elem {
+            padding: 5px;
+        }
+    </style>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="vertical-container">
+                <div class="elem">
+                    <h1>Go, Dzilla!</h1>
+                </div>
+                <div class="vertical-container elem">
+                    <label for="url-input">URL</label>
+                    <input name="url" id="url-input" required/>
+                </div>
+                <div class="elem">
+                    <button id="create" onclick="createUrl();">Create</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        function createUrl() {
+            $.ajax({
+                type: "POST",
+                url: "/api/urls",
+                dataType: "json",
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "url": $("#url-input").val()
+                }),
+                success: function(response) {
+                    window.location.replace(`/urls/${response.token}/`);
+                },
+                error: function(request, status, error) {
+                    alert(request.responseJSON.message);
+                }
+            });
+        }
+    </script>
+</html>

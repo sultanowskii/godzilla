@@ -1,4 +1,4 @@
-package endpoints
+package api
 
 import (
 	"net/http"
@@ -14,13 +14,13 @@ type (
 	}
 
 	CreateUrlResponse struct {
-		Url    string `json:"url"`
-		Dzilla string `json:"dzilla"`
+		Url   string `json:"url"`
+		Token string `json:"token"`
 	}
 
 	GetUrlResponse struct {
-		Url    string `json:"url"`
-		Dzilla string `json:"dzilla"`
+		Url   string `json:"url"`
+		Token string `json:"token"`
 	}
 )
 
@@ -32,46 +32,33 @@ func CreateUrl(c echo.Context) error {
 	}
 
 	url := request.Url
-	dzilla := util.GetDzilla(url)
+	token := util.GetToken(url)
 
 	client := storage.GetRedisClient()
-	client.Set(storage.Ctx, dzilla, url, 0)
+	client.Set(storage.Ctx, token, url, 0)
 
 	response := &CreateUrlResponse{
-		Url:    url,
-		Dzilla: dzilla,
+		Url:   url,
+		Token: token,
 	}
 
 	return c.JSON(http.StatusCreated, response)
 }
 
 func GetUrl(c echo.Context) error {
-	dzilla := c.QueryParam("dzilla")
+	token := c.Param("token")
 
 	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, dzilla).Result()
+	url, err := client.Get(storage.Ctx, token).Result()
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, Error{Message: "Not found."})
 	}
 
 	response := GetUrlResponse{
-		Url:    url,
-		Dzilla: dzilla,
+		Url:   url,
+		Token: token,
 	}
 
 	return c.JSON(http.StatusOK, response)
-}
-
-func Dzilla(c echo.Context) error {
-	dzilla := c.Param("dzilla")
-
-	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, dzilla).Result()
-
-	if err != nil {
-		return c.JSON(http.StatusNotFound, Error{Message: "Not found."})
-	}
-
-	return c.Redirect(http.StatusFound, url)
 }
