@@ -58,10 +58,11 @@
     </body>
     <script>
         window.onload = function() {
-            token = $("#short").text()
+            shortElem = $("#short")
+            token = shortElem.text()
             short = `${window.location.origin}/${token}`
-            $("#short").text(short)
-            $("#short").attr("href", short)
+            shortElem.text(short)
+            shortElem.attr("href", short)
         };
     </script>
 </html>
