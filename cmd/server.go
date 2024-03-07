@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/sultanowskii/godzilla/internal/endpoints"
 	"github.com/sultanowskii/godzilla/pkg/storage"
@@ -13,6 +14,9 @@ func main() {
 	e := echo.New()
 	e.POST("/short", endpoints.CreateUrl)
 	e.GET("/short", endpoints.GetUrl)
+	e.GET("/d/:dzilla", endpoints.Dzilla)
 
-	e.Logger.Fatal(e.Start(":8431"))
+	e.Use(middleware.Logger())
+
+	e.Logger.Debug(e.Start(":8431"))
 }

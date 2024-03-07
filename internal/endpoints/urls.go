@@ -62,3 +62,16 @@ func GetUrl(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response)
 }
+
+func Dzilla(c echo.Context) error {
+	dzilla := c.Param("dzilla")
+
+	client := storage.GetRedisClient()
+	url, err := client.Get(storage.Ctx, dzilla).Result()
+
+	if err != nil {
+		return c.JSON(http.StatusNotFound, Error{Message: "Not found."})
+	}
+
+	return c.Redirect(http.StatusFound, url)
+}
