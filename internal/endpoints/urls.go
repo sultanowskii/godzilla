@@ -14,13 +14,13 @@ type (
 	}
 
 	CreateUrlResponse struct {
-		Url  string `json:"url"`
-		Hash string `json:"hash"`
+		Url    string `json:"url"`
+		Dzilla string `json:"dzilla"`
 	}
 
 	GetUrlResponse struct {
-		Url  string `json:"url"`
-		Hash string `json:"hash"`
+		Url    string `json:"url"`
+		Dzilla string `json:"dzilla"`
 	}
 )
 
@@ -32,32 +32,32 @@ func CreateUrl(c echo.Context) error {
 	}
 
 	url := request.Url
-	hash := util.HashString(url)
+	dzilla := util.GetDzilla(url)
 
 	client := storage.GetRedisClient()
-	client.Set(storage.Ctx, hash, url, 0)
+	client.Set(storage.Ctx, dzilla, url, 0)
 
 	response := &CreateUrlResponse{
-		Url:  url,
-		Hash: hash,
+		Url:    url,
+		Dzilla: dzilla,
 	}
 
 	return c.JSON(http.StatusCreated, response)
 }
 
 func GetUrl(c echo.Context) error {
-	hash := c.QueryParam("hash")
+	dzilla := c.QueryParam("dzilla")
 
 	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, hash).Result()
+	url, err := client.Get(storage.Ctx, dzilla).Result()
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, Error{Message: "Not found."})
 	}
 
 	response := GetUrlResponse{
-		Url:  url,
-		Hash: hash,
+		Url:    url,
+		Dzilla: dzilla,
 	}
 
 	return c.JSON(http.StatusOK, response)
