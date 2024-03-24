@@ -46,7 +46,7 @@
                 </div>
                 <div class="elem vertical-container">
                     <label id="label-short" for="short">Short:</label>
-                    <a id="short">{{ .Token }}</a>
+                    <a id="short">{{ .Suffix }}</a>
                 </div>
                 <div class="elem">
                     <a href="/">
@@ -59,8 +59,8 @@
     <script>
         window.onload = function() {
             shortElem = $("#short")
-            token = shortElem.text()
-            short = `${window.location.origin}/${token}`
+            suffix = shortElem.text()
+            short = `${window.location.origin}/${suffix}`
             shortElem.text(short)
             shortElem.attr("href", short)
         };

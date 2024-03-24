@@ -9,32 +9,32 @@ import (
 	"github.com/sultanowskii/godzilla/pkg/storage"
 )
 
-func UrlViewPage(c echo.Context) error {
-	token := c.Param("token")
+func ResourceInfoPage(c echo.Context) error {
+	suffix := c.Param("suffix")
 
 	client := storage.GetRedisClient()
-	orig, err := client.Get(storage.Ctx, token).Result()
+	url, err := client.Get(storage.Ctx, suffix).Result()
 
-	url := &models.Url{
-		Url:   orig,
-		Token: token,
+	resource := &models.Resource{
+		Url:    url,
+		Suffix: suffix,
 	}
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, api.Error{Message: "Not found."})
 	}
 
-	return c.Render(http.StatusOK, "dzilla.html", url)
+	return c.Render(http.StatusOK, "dzilla.html", resource)
 }
 
 func Dzilla(c echo.Context) error {
-	token := c.Param("token")
+	suffix := c.Param("suffix")
 
 	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, token).Result()
+	url, err := client.Get(storage.Ctx, suffix).Result()
 
 	if err != nil {
-		return c.JSON(http.StatusNotFound, api.Error{Message: "Not found."})
+		return c.Render(http.StatusOK, "create.html", createRenderArgs{PreferredSuffix: suffix})
 	}
 
 	return c.Redirect(http.StatusFound, url)

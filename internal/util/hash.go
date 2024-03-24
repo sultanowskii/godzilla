@@ -9,7 +9,7 @@ var (
 	allowedSymbols = []rune(
 		"abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789",
 	)
-	tokenSize = 6
+	generatedSuffixSize = 6
 )
 
 func GetStringIntHash(s string) int64 {
@@ -28,12 +28,12 @@ func GetStringIntHash(s string) int64 {
 	return result
 }
 
-func GetToken(s string) string {
-	symbols := make([]rune, tokenSize)
+func GenerateSuffix(s string) string {
+	symbols := make([]rune, generatedSuffixSize)
 
 	random := rand.New(rand.NewSource(GetStringIntHash(s)))
 
-	for i := 0; i < tokenSize; i++ {
+	for i := 0; i < generatedSuffixSize; i++ {
 		symbols[i] = allowedSymbols[random.Intn(len(allowedSymbols))]
 	}
 

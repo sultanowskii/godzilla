@@ -13,5 +13,6 @@ TODO:
 - [ ] Better token generation with collision prevention
 - [ ] URL validation
 - [ ] URL unification (if necessary)
-- [ ] Make it possible to create custom tokens (like godzilla:12345/Github -> github.com)
+- [ ] Accept URN (and just basically URI without protocol, maybe?)
+- [x] Make it possible to create custom tokens (like godzilla:12345/Github -> github.com)
 - [ ] Configuration

@@ -19,13 +19,13 @@ func SetupEcho() *echo.Echo {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	apiGroup := e.Group("/api")
-	apiGroup.POST("/urls", api.CreateUrl)
-	apiGroup.GET("/urls/:token", api.GetUrl)
+	apiGroup.POST("/resources", api.CreateResource)
+	apiGroup.GET("/resources/:suffix", api.GetResource)
 
 	pageGroup := e.Group("")
-	pageGroup.GET("/:token", pages.Dzilla)
 	pageGroup.GET("/", pages.CreatePage)
-	pageGroup.GET("/urls/:token", pages.UrlViewPage)
+	pageGroup.GET("/:suffix", pages.Dzilla)
+	pageGroup.GET("/:suffix/info", pages.ResourceInfoPage)
 
 	e.Use(middleware.Logger())
 

@@ -44,24 +44,36 @@
                     <label for="url-input">URL</label>
                     <input name="url" id="url-input" required/>
                 </div>
+                <div class="vertical-container elem">
+                    <label for="suffix-input">Suffix (e.g. /cool-suffix)</label>
+                    <input name="suffix" id="suffix-input" value="{{ .PreferredSuffix }}"/>
+                </div>
                 <div class="elem">
-                    <button id="create" onclick="createUrl();">Create</button>
+                    <button id="create" onclick="createResource();">Create</button>
                 </div>
             </div>
         </div>
     </body>
     <script>
-        function createUrl() {
+        function createResource() {
+            let url = $("#url-input").val()
+            let suffix = $("#suffix-input").val().trim()
+
+            if (!suffix) {
+                suffix = null
+            }
+
             $.ajax({
                 type: "POST",
-                url: "/api/urls",
+                url: "/api/resources",
                 dataType: "json",
-                contentType: 'application/json',
+                contentType: "application/json",
                 data: JSON.stringify({
-                    "url": $("#url-input").val()
+                    "url": url,
+                    "suffix": suffix,
                 }),
                 success: function(response) {
-                    window.location.replace(`/urls/${response.token}/`);
+                    window.location.replace(`/${response.suffix}/info/`);
                 },
                 error: function(request, status, error) {
                     alert(request.responseJSON.message);

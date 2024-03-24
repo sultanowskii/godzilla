@@ -6,6 +6,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type createRenderArgs struct {
+	PreferredSuffix string
+}
+
 func CreatePage(c echo.Context) error {
-	return c.Render(http.StatusOK, "create.html", "asd")
+	return c.Render(http.StatusOK, "create.html", createRenderArgs{})
 }
