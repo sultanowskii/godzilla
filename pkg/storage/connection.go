@@ -2,9 +2,9 @@ package storage
 
 import "github.com/redis/go-redis/v9"
 
-func InitRedisClient() {
+func InitRedisClient(address string) {
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     address,
 		Password: "",
 		DB:       0,
 	})
