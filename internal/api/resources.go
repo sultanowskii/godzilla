@@ -28,37 +28,33 @@ type (
 
 func CreateResource(c echo.Context) error {
 	request := new(CreateResourceRequest)
-
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 
-	url := request.Url
-	preferredSuffix := request.Suffix
+	urlString := request.Url
+	if err := util.ValidateUrl(urlString); err != nil {
+		return c.JSON(http.StatusBadRequest, Error{Message: err.Error()})
+	}
 
 	client := storage.GetRedisClient()
 
 	var suffix string
-	if preferredSuffix == nil {
-		suffix = util.GenerateSuffix(url)
-	} else {
+	if preferredSuffix := request.Suffix; preferredSuffix != nil {
 		suffix = *preferredSuffix
-		suffixExists := client.Exists(storage.Ctx, suffix).Val()
 
-		if !util.IsSuffixValid(suffix) {
-			return c.JSON(http.StatusBadRequest, Error{Message: "Suffix contains invalid characters."})
+		if err := util.ValidateCustomSuffix(suffix); err != nil {
+			return c.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 		}
-
-		if suffixExists == 1 {
-			return c.JSON(http.StatusBadRequest, Error{Message: "Suffix already exists."})
-		}
+	} else {
+		suffix = util.GenerateSuffix(urlString)
 	}
 
 	// TODO: change to SetNX?
-	client.Set(storage.Ctx, suffix, url, 0)
+	client.Set(storage.Ctx, suffix, urlString, 0)
 
 	response := &CreateResourceResponse{
-		Url:    url,
+		Url:    urlString,
 		Suffix: suffix,
 	}
 
@@ -72,7 +68,7 @@ func GetResource(c echo.Context) error {
 	url, err := client.Get(storage.Ctx, suffix).Result()
 
 	if err != redis.Nil {
-		return c.JSON(http.StatusNotFound, Error{Message: "Not found."})
+		return c.JSON(http.StatusNotFound, Error{Message: "not found"})
 	}
 
 	response := GetResourceResponse{

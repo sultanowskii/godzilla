@@ -40,9 +40,22 @@
                 <div class="elem">
                     <h1>Go, Dzilla!</h1>
                 </div>
-                <div class="vertical-container elem">
-                    <label for="url-input">URL</label>
-                    <input name="url" id="url-input" required/>
+                <div class="horizontal-container">
+                    <div class="vertical-container elem">
+                        <label for="protocol">Protocol</label>
+                        <select name="protocol" id="protocol">
+                            <option value="https">https</option>
+                            <option value="http">http</option>
+                            <option value="ftp">ftp</option>
+                        </select>
+                    </div>
+                    <div>
+                        <br>://
+                    </div>
+                    <div class="vertical-container elem">
+                        <label for="url-input">URL</label>
+                        <input name="url" id="url-input" required/>
+                    </div>
                 </div>
                 <div class="vertical-container elem">
                     <label for="suffix-input">Suffix (e.g. /cool-suffix)</label>
@@ -56,7 +69,8 @@
     </body>
     <script>
         function createResource() {
-            let url = $("#url-input").val()
+            let protocol = $("#protocol").val()
+            let url = $("#url-input").val().trim()
             let suffix = $("#suffix-input").val().trim()
 
             if (!suffix) {

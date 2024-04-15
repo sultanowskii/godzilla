@@ -12,7 +12,7 @@ var (
 	generatedSuffixSize = 6
 )
 
-func GetStringIntHash(s string) int64 {
+func getStringIntHash(s string) int64 {
 	hash := sha256.New()
 	hash.Write([]byte(s))
 
@@ -31,7 +31,7 @@ func GetStringIntHash(s string) int64 {
 func GenerateSuffix(s string) string {
 	symbols := make([]rune, generatedSuffixSize)
 
-	random := rand.New(rand.NewSource(GetStringIntHash(s)))
+	random := rand.New(rand.NewSource(getStringIntHash(s)))
 
 	for i := 0; i < generatedSuffixSize; i++ {
 		symbols[i] = allowedSymbols[random.Intn(len(allowedSymbols))]
