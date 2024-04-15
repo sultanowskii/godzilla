@@ -1,0 +1,8 @@
+services:
+  godzilla:
+    build: .
+    ports:
+      - "8431:8431"
+    restart: always
+  redis:
+    image: "redis:alpine"

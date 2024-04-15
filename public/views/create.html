@@ -46,7 +46,6 @@
                         <select name="protocol" id="protocol">
                             <option value="https">https</option>
                             <option value="http">http</option>
-                            <option value="ftp">ftp</option>
                         </select>
                     </div>
                     <div>
@@ -70,7 +69,7 @@
     <script>
         function createResource() {
             let protocol = $("#protocol").val()
-            let url = $("#url-input").val().trim()
+            let url = protocol + "://" + $("#url-input").val().trim()
             let suffix = $("#suffix-input").val().trim()
 
             if (!suffix) {
