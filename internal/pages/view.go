@@ -12,8 +12,8 @@ import (
 func ResourceInfoPage(c echo.Context) error {
 	suffix := c.Param("suffix")
 
-	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, suffix).Result()
+	client := storage.RedisClient
+	url, err := client.Get(storage.RedisContext, suffix).Result()
 
 	resource := &models.Resource{
 		Url:    url,
@@ -30,8 +30,8 @@ func ResourceInfoPage(c echo.Context) error {
 func Dzilla(c echo.Context) error {
 	suffix := c.Param("suffix")
 
-	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, suffix).Result()
+	client := storage.RedisClient
+	url, err := client.Get(storage.RedisContext, suffix).Result()
 
 	if err != nil {
 		return c.Render(http.StatusOK, "create.html", createRenderArgs{PreferredSuffix: suffix})

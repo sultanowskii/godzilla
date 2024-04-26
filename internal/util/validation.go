@@ -19,9 +19,9 @@ func ValidateCustomSuffix(s string) error {
 		return errors.New("suffix contains invalid characters")
 	}
 
-	client := storage.GetRedisClient()
+	client := storage.RedisClient
 
-	suffixExists := client.Exists(storage.Ctx, s).Val()
+	suffixExists := client.Exists(storage.RedisContext, s).Val()
 
 	if suffixExists == 1 {
 		return errors.New("suffix already exists")
@@ -37,7 +37,7 @@ func ValidateUrl(s string) error {
 		return err
 	}
 	if u.Host == "" {
-		return errors.New("please provide an absolute url")
+		return errors.New("please provide absolute url")
 	}
 
 	return nil

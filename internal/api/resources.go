@@ -1,10 +1,12 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/redis/go-redis/v9"
+	"github.com/sultanowskii/godzilla/internal/logging"
 	"github.com/sultanowskii/godzilla/internal/util"
 	"github.com/sultanowskii/godzilla/pkg/storage"
 )
@@ -37,7 +39,7 @@ func CreateResource(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, Error{Message: err.Error()})
 	}
 
-	client := storage.GetRedisClient()
+	client := storage.RedisClient
 
 	var suffix string
 	if preferredSuffix := request.Suffix; preferredSuffix != nil {
@@ -51,7 +53,9 @@ func CreateResource(c echo.Context) error {
 	}
 
 	// TODO: change to SetNX?
-	client.Set(storage.Ctx, suffix, urlString, 0)
+	client.Set(storage.RedisContext, suffix, urlString, 0)
+
+	logging.Debug(fmt.Sprintf("created resource '%s'", suffix))
 
 	response := &CreateResourceResponse{
 		Url:    urlString,
@@ -64,8 +68,8 @@ func CreateResource(c echo.Context) error {
 func GetResource(c echo.Context) error {
 	suffix := c.Param("suffix")
 
-	client := storage.GetRedisClient()
-	url, err := client.Get(storage.Ctx, suffix).Result()
+	client := storage.RedisClient
+	url, err := client.Get(storage.RedisContext, suffix).Result()
 
 	if err != redis.Nil {
 		return c.JSON(http.StatusNotFound, Error{Message: "not found"})

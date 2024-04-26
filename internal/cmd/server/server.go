@@ -9,7 +9,7 @@ import (
 	"github.com/sultanowskii/godzilla/internal/pages"
 )
 
-func SetupEcho() *echo.Echo {
+func Setup() *echo.Echo {
 	t := &pages.Template{
 		Templates: template.Must(template.ParseGlob("public/views/*.html")),
 	}

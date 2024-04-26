@@ -7,6 +7,6 @@ import (
 )
 
 var (
-	redisClient *redis.Client
-	Ctx         = context.TODO()
+	RedisClient  *redis.Client
+	RedisContext = context.TODO()
 )
